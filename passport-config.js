@@ -14,16 +14,14 @@ function initialize(passport, getUserByEmail, getUserById) {
       } else {
         return done(null, false, { message: 'Password incorrect' });
       }
-    } catch (error) {
-      return done(error);
+    } catch (e) {
+      return done(e);
     }
   };
 
   passport.use(new LocalStrategy({ usernameField: 'email' }, authenticateUser));
-  passport.serializeUser((user, done) => {
-    done(null, user.id);
-  });
-  passport.deserializeUser((user, done) => {
+  passport.serializeUser((user, done) => done(null, user.id));
+  passport.deserializeUser((id, done) => {
     return done(null, getUserById(id));
   });
 }
